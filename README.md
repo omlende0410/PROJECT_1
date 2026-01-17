@@ -42,4 +42,4 @@ can lead to serious consequences. Early failure detection improves reliability.
 - Add visualization dashboard
 
 ## Project Status
-Project setup completed. Development will begin soon.
+Project setup completed.done some part of matplotlib,numpy.pandas
