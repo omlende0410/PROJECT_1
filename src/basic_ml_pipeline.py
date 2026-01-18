@@ -25,7 +25,7 @@ model.fit(X_train, y_train)
 
 # 5. Model evaluation
 score = model.score(X_test, y_test)
-print("Model R² score:", score)
+print("Model R² score:", score) # add more metrics into this , revaluation 
 
 # 6. Prediction for new input
 hours = np.array([[9]])
