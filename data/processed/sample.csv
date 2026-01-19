@@ -1,0 +1,15 @@
+employee_id,age,gender,education,experience_years,department,salary
+E001,22,M,Bachelors,1.0,IT,25000.0
+E002,25,F,Bachelors,2.0,HR,30000.0
+E003,28,M,Masters,4.0,IT,45000.0
+E004,32,F,Masters,6.0,Finance,60000.0
+E005,35,M,PhD,8.0,IT,80000.0
+E006,29,M,Bachelors,5.0,Marketing,48000.0
+E007,42,M,Masters,15.0,Finance,120000.0
+E008,38,F,Bachelors,12.0,HR,90000.0
+E009,26,M,Bachelors,6.0,IT,35000.0
+E010,45,M,Masters,20.0,Finance,150000.0
+E011,30,F,Bachelors,7.0,Marketing,55000.0
+E012,24,F,Bachelors,2.0,HR,55000.0
+E013,55,M,PhD,30.0,Management,200000.0
+E014,27,M,Bachelors,3.0,IT,42000.0
