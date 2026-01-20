@@ -42,4 +42,12 @@ can lead to serious consequences. Early failure detection improves reliability.
 - Add visualization dashboard
 
 ## Project Status
-Project setup completed.done some part of matplotlib,numpy.pandas
+
+- Supports multiple CSV datasets
+- Automatic data cleaning
+- Feature analysis and visualizations
+- Report generation
+
+New data files can be added or removed without changing the code.
+
+Project is under active development.
