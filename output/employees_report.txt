@@ -1,0 +1,29 @@
+DATA CLEANING REPORT
+Dataset: employees.csv
+---------------------------------------------
+
+STRUCTURE
+Columns before: 5
+Columns after: 5
+
+ROWS
+Rows before cleaning: 5
+Rows after cleaning: 3
+
+NULL VALUES (Before)
+id            0
+name          0
+age           1
+salary        1
+department    0
+
+NULL VALUES (After)
+id            0
+name          0
+age           0
+salary        0
+department    0
+
+DUPLICATES
+Duplicates before cleaning: 0
+Duplicates after cleaning: 0

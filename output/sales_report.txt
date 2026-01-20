@@ -1,0 +1,27 @@
+DATA CLEANING REPORT
+Dataset: sales.csv
+---------------------------------------------
+
+STRUCTURE
+Columns before: 4
+Columns after: 4
+
+ROWS
+Rows before cleaning: 5
+Rows after cleaning: 2
+
+NULL VALUES (Before)
+order_id    0
+region      0
+amount      1
+discount    2
+
+NULL VALUES (After)
+order_id    0
+region      0
+amount      0
+discount    0
+
+DUPLICATES
+Duplicates before cleaning: 0
+Duplicates after cleaning: 0

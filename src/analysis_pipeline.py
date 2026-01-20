@@ -11,14 +11,22 @@
 # Execute steps sequentially
 
 from data_check import check_data
-from data_cleaning import clean_data
-import feature_analysis  # feature_analysis.py runs its code on import
-import visualize_salary  # visualize_salary.py runs its code on import
+import data_cleaning  # runs the cleaning script automatically
+import feature_analysis  # merged file that does analysis + visualization automatically
 
-# Step 1: Check raw data
-check_data("sample.csv")
+from pathlib import Path
 
-# Step 2: Clean raw data
-clean_data("sample.csv")
+# ---------------- STEP 1: Check all raw datasets ----------------
+RAW_DIR = Path(__file__).resolve().parent.parent / "data" / "raw"
 
-# Step 3 & 4: feature_analysis.py and visualize_salary.py will execute automatically on import
+for raw_file in RAW_DIR.glob("*.csv"):
+    check_data(raw_file.name)  # runs check_data for each dataset
+
+# ---------------- STEP 2: Clean all raw datasets ----------------
+# data_cleaning.py already loops over all CSVs in RAW_DIR
+# so just importing it is enough
+
+# ---------------- STEP 3: Feature analysis & visualization ----------------
+# feature_analysis.py now handles everything automatically
+
+print("\nPipeline completed successfully ✅")

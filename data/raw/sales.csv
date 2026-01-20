@@ -1,0 +1,6 @@
+order_id,region,amount,discount
+101,North,5000,
+102,South,7000,10
+103,East,,5
+104,North,5000,
+105,South,7000,10

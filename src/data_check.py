@@ -35,7 +35,8 @@ def check_data(file_name):
     print("\nDuplicate rows:", df.duplicated().sum())
     print("\nStatistical summary:\n", df.describe(include="all"))
 
+# ------------------ RUN AS SCRIPT ------------------
 if __name__ == "__main__":
-    check_data("sample.csv")
-
-
+    RAW_DIR = ROOT_DIR / "data" / "raw"
+    for raw_file in RAW_DIR.glob("*.csv"):
+        check_data(raw_file.name)

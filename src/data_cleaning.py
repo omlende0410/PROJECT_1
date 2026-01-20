@@ -12,47 +12,77 @@
 # incorrect data types
 # Rename columns to clean names
 # Save cleaned data to data/processed/
-
-from pathlib import Path
 import pandas as pd
+from pathlib import Path
 
-# Project root
-ROOT_DIR = Path(__file__).resolve().parent.parent
+# ------------------ PATH SETUP ------------------
+ROOT_DIR = Path(__file__).resolve().parents[1]
+RAW_DIR = ROOT_DIR / "data" / "raw"
+PROCESSED_DIR = ROOT_DIR / "data" / "processed"
+OUTPUT_DIR = ROOT_DIR / "output"
 
-def clean_data(file_name):
-    data_path = ROOT_DIR / "data" / "raw" / file_name
-    df = pd.read_csv(data_path)
-    
-    print("\n--- BEFORE CLEANING ---")
-    print("Shape:", df.shape)
-    print("Missing values:\n", df.isnull().sum())
-    print("Duplicate rows:", df.duplicated().sum())
+# Create folders if they don't exist
+PROCESSED_DIR.mkdir(exist_ok=True)
+OUTPUT_DIR.mkdir(exist_ok=True)
 
-    # 1. Remove duplicates
+# ------------------ PROCESS ALL DATASETS ------------------
+for raw_file in RAW_DIR.glob("*.csv"):
+    print(f"\nProcessing file: {raw_file.name}")
+
+    # Load data
+    df = pd.read_csv(raw_file)
+
+    # File naming
+    file_stem = raw_file.stem
+    processed_file = PROCESSED_DIR / f"{file_stem}_cleaned.csv"
+    report_file = OUTPUT_DIR / f"{file_stem}_report.txt"
+
+    # ------------------ BEFORE CLEANING ------------------
+    rows_before = df.shape[0]
+    cols_before = df.shape[1]
+    nulls_before = df.isnull().sum()
+    duplicates_before = df.duplicated().sum()
+
+    # ------------------ CLEANING LOGIC ------------------
     df = df.drop_duplicates()
+    df = df.dropna()
 
-    # 2. Fill missing numerical values with median
-    num_cols = df.select_dtypes(include=["int64", "float64"]).columns
-    for col in num_cols:
-        df[col] = df[col].fillna(df[col].median())
+    # ------------------ AFTER CLEANING ------------------
+    rows_after = df.shape[0]
+    cols_after = df.shape[1]
+    nulls_after = df.isnull().sum()
+    duplicates_after = df.duplicated().sum()
 
-    # 3. Fill missing categorical values with mode
-    cat_cols = df.select_dtypes(include=["object"]).columns
-    for col in cat_cols:
-        df[col] = df[col].fillna(df[col].mode()[0])
+    # ------------------ SAVE CLEANED DATA ------------------
+    df.to_csv(processed_file, index=False)
 
-    # 4. Reset index
-    df = df.reset_index(drop=True)
+    # ------------------ WRITE REPORT ------------------
+    with open(report_file, "w") as f:
+        f.write(f"DATA CLEANING REPORT\n")
+        f.write(f"Dataset: {raw_file.name}\n")
+        f.write("-" * 45 + "\n\n")
 
-    print("\n--- AFTER CLEANING ---")
-    print("Shape:", df.shape)
-    print("Missing values:\n", df.isnull().sum())
-    print("Duplicate rows:", df.duplicated().sum())
+        f.write("STRUCTURE\n")
+        f.write(f"Columns before: {cols_before}\n")
+        f.write(f"Columns after: {cols_after}\n\n")
 
-    # Save cleaned data
-    processed_path = ROOT_DIR / "data" / "processed" / file_name
-    df.to_csv(processed_path, index=False)
-    print(f"\nCleaned data saved to: {processed_path}")
+        f.write("ROWS\n")
+        f.write(f"Rows before cleaning: {rows_before}\n")
+        f.write(f"Rows after cleaning: {rows_after}\n\n")
 
-if __name__ == "__main__":
-    clean_data("sample.csv")
+        f.write("NULL VALUES (Before)\n")
+        f.write(nulls_before.to_string())
+        f.write("\n\n")
+
+        f.write("NULL VALUES (After)\n")
+        f.write(nulls_after.to_string())
+        f.write("\n\n")
+
+        f.write("DUPLICATES\n")
+        f.write(f"Duplicates before cleaning: {duplicates_before}\n")
+        f.write(f"Duplicates after cleaning: {duplicates_after}\n")
+
+    print(f"Cleaned data saved to: {processed_file.name}")
+    print(f"Report generated: {report_file.name}")
+
+print("\nAll datasets processed successfully ✅")
