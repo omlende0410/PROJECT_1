@@ -1,0 +1,4 @@
+id,name,age,salary,department,uncertainty_score,failure_risk
+1,Amit,25.0,30000.0,IT,0.0,Low Risk
+3,Rohit,29.0,50000.0,IT,0.0,Low Risk
+5,Amit,25.0,30000.0,IT,0.0,Low Risk

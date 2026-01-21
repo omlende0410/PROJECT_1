@@ -34,3 +34,16 @@ def save_csv(df, relative_path):
     file_path = ROOT_DIR / relative_path
     file_path.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(file_path, index=False)
+
+
+def detect_target_column(df):
+    """
+    Automatically detect target column.
+    Priority:
+    1. Column named 'target', 'label', or 'y'
+    2. Fallback: last column
+    """
+    for col in df.columns:
+        if col.lower() in ["target", "label", "y"]:
+            return col
+    return df.columns[-1]
