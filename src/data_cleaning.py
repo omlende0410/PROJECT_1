@@ -1,38 +1,26 @@
-# Purpose:
-# Fix bad data and create clean dataset.
-
-# This file should:
-# Load raw data
-# Handle missing values:
-# numerical → mean / median
-# categorical → mode
-# Remove duplicates
-# Fix obvious garbage:
-# negative values where impossible
-# incorrect data types
-# Rename columns to clean names
-# Save cleaned data to data/processed/
 import pandas as pd
 from pathlib import Path
+import sys
 
 # ------------------ PATH SETUP ------------------
-ROOT_DIR = Path(__file__).resolve().parents[1]
+ROOT_DIR = Path(__file__).resolve().parent.parent
+sys.path.append(str(ROOT_DIR))
+
+from src.utils import fix_data_types
+
 RAW_DIR = ROOT_DIR / "data" / "raw"
 PROCESSED_DIR = ROOT_DIR / "data" / "processed"
 OUTPUT_DIR = ROOT_DIR / "output"
 
-# Create folders if they don't exist
-PROCESSED_DIR.mkdir(exist_ok=True)
-OUTPUT_DIR.mkdir(exist_ok=True)
+PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # ------------------ PROCESS ALL DATASETS ------------------
 for raw_file in RAW_DIR.glob("*.csv"):
     print(f"\nProcessing file: {raw_file.name}")
 
-    # Load data
     df = pd.read_csv(raw_file)
 
-    # File naming
     file_stem = raw_file.stem
     processed_file = PROCESSED_DIR / f"{file_stem}_cleaned.csv"
     report_file = OUTPUT_DIR / f"{file_stem}_report.txt"
@@ -44,8 +32,17 @@ for raw_file in RAW_DIR.glob("*.csv"):
     duplicates_before = df.duplicated().sum()
 
     # ------------------ CLEANING LOGIC ------------------
-    df = df.drop_duplicates()
-    df = df.dropna()
+    # Step A: Rescue "String Numbers"
+    df = fix_data_types(df) 
+
+    # Step B: Domain Physics Validation (Garbage Removal)
+    # Remove 'Sun-hot' outliers (like 9999K) and negative speeds
+    df = df[df['Air_Temp_K'] < 500]
+    df = df[df['Rotational_Speed_RPM'] >= 0]
+
+    # Step C: Strict Cleaning (Remove duplicates and remaining NaNs)
+    df = df.drop_duplicates() 
+    df = df.dropna() 
 
     # ------------------ AFTER CLEANING ------------------
     rows_after = df.shape[0]
@@ -54,6 +51,7 @@ for raw_file in RAW_DIR.glob("*.csv"):
     duplicates_after = df.duplicated().sum()
 
     # ------------------ SAVE CLEANED DATA ------------------
+    # We save as '_cleaned.csv' so Step 5 (Uncertainty) can find it
     df.to_csv(processed_file, index=False)
 
     # ------------------ WRITE REPORT ------------------
@@ -68,19 +66,20 @@ for raw_file in RAW_DIR.glob("*.csv"):
 
         f.write("ROWS\n")
         f.write(f"Rows before cleaning: {rows_before}\n")
-        f.write(f"Rows after cleaning: {rows_after}\n\n")
+        f.write(f"Rows after cleaning: {rows_after}\n")
+        f.write(f"Net Rows Lost: {rows_before - rows_after}\n\n")
+
+        f.write("ACTIONS TAKEN\n")
+        f.write("- Applied numeric type rescue (utils.py)\n")
+        f.write("- Filtered physical anomalies (Temp < 500K, RPM >= 0)\n")
+        f.write("- Removed duplicates and null values\n\n")
 
         f.write("NULL VALUES (Before)\n")
         f.write(nulls_before.to_string())
         f.write("\n\n")
 
-        f.write("NULL VALUES (After)\n")
-        f.write(nulls_after.to_string())
-        f.write("\n\n")
-
-        f.write("DUPLICATES\n")
-        f.write(f"Duplicates before cleaning: {duplicates_before}\n")
-        f.write(f"Duplicates after cleaning: {duplicates_after}\n")
+        f.write("DUPLICATES (Before)\n")
+        f.write(f"Count: {duplicates_before}\n")
 
     print(f"Cleaned data saved to: {processed_file.name}")
     print(f"Report generated: {report_file.name}")

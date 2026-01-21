@@ -1,4 +1,4 @@
-# AI-Based Model Failure Predictor 🚀
+# Automated CSV Data Cleaning, Risk Analysis & Visualization Pipeline 🚀
 
 ## Project Description
 A robust Python framework designed to detect and predict machine learning model failures. Unlike traditional "black-box" AI, this system uses **Uncertainty Estimation** and **Confidence Analysis** to flag when a model is guessing, ensuring reliability in high-stakes environments.
@@ -45,3 +45,39 @@ In safety-critical domains such as **Healthcare, Autonomous Systems, and Finance
 * ✅ **End-to-End Automation:** From raw data to failure-risk visualization.
 * ✅ **Modular Architecture:** Clean separation of concerns (src/modeling, src/utils).
 * 🚧 **In Progress:** Deep Learning integration for MC Dropout and OOD (Out-of-Distribution) detection.
+
+## Project Structure
+
+PRO_1/
+├── .gitignore                 # Git ignore rules
+├── requirements.txt           # Project dependencies
+├── README.md                  # Project overview & usage
+├── industrial_data.py         # Standalone execution script
+│
+├── .venv/                     # Virtual environment
+│
+├── data/
+│   ├── raw/                   # Original input CSV files
+│   ├── processed/             # Cleaned & transformed data
+│   └── external/              # External datasets (optional)
+│
+├── docs/                      # Documentation & notes
+│
+├── models/                    # Saved ML models
+│   └── messy_machine_data_cleaned_model.pkl
+│
+├── src/                       # Source code
+│   ├── modeling/              # Model training logic
+│   ├── analysis_pipeline.py   # End-to-end pipeline runner
+│   ├── data_check.py          # Data validation
+│   ├── data_cleaning.py       # Data preprocessing
+│   ├── feature_analysis.py    # EDA & feature analysis
+│   ├── predict.py             # Prediction logic
+│   ├── summary_dashboard.py   # Visualizations & summaries
+│   └── utils.py               # Helper utilities
+│
+├── output/                    # Generated results
+│   ├── FINAL_PREDICTIONS_messy_machine.csv
+│   ├── messy_machine_data_cleaned_failure.csv
+│   ├── messy_machine_data_uncertainty_plot.png
+│   └── messy_machine_data_report.txt

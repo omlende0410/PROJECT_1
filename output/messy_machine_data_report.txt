@@ -1,0 +1,29 @@
+DATA CLEANING REPORT
+Dataset: messy_machine_data.csv
+---------------------------------------------
+
+STRUCTURE
+Columns before: 7
+Columns after: 7
+
+ROWS
+Rows before cleaning: 5049
+Rows after cleaning: 4520
+Net Rows Lost: 529
+
+ACTIONS TAKEN
+- Applied numeric type rescue (utils.py)
+- Filtered physical anomalies (Temp < 500K, RPM >= 0)
+- Removed duplicates and null values
+
+NULL VALUES (Before)
+    Type                  0
+Air_Temp_K              253
+Process_Temp_K            0
+Rotational_Speed_RPM      0
+Torque_Nm               253
+Tool_Wear_Min             0
+Machine_Failure           0
+
+DUPLICATES (Before)
+Count: 39
